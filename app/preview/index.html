@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>FutariMap — プレビュー</title>
+<style>
+  :root {
+    --bg: #fafafa;
+    --card: #f5f5f7;
+    --ink: #222;
+    --ink-dim: #666;
+    --both: #ff6b81;
+    --self: #ffc2cc;
+    --partner: #c7d7ff;
+    --none: #ececef;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Noto Sans JP", sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    display: flex;
+    justify-content: center;
+    padding: 24px 12px;
+  }
+  .phone {
+    width: 100%;
+    max-width: 420px;
+    background: #fff;
+    border-radius: 28px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+    overflow: hidden;
+    border: 1px solid #eee;
+  }
+  .nav {
+    padding: 14px 16px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .nav h1 { font-size: 17px; margin: 0; font-weight: 600; }
+  .nav .tabs { display: flex; gap: 6px; }
+  .tab {
+    font-size: 12px; padding: 4px 10px; border-radius: 999px;
+    background: #f1f1f4; color: #555; cursor: pointer; border: none;
+  }
+  .tab.active { background: var(--both); color: #fff; }
+  .screen { padding: 16px; display: none; gap: 16px; flex-direction: column; }
+  .screen.active { display: flex; }
+
+  /* Map screen */
+  .stats { display: flex; gap: 10px; }
+  .stat {
+    flex: 1; background: var(--card); border-radius: 12px;
+    padding: 12px; text-align: center;
+  }
+  .stat .v { font-size: 24px; font-weight: 700; }
+  .stat .l { font-size: 11px; color: var(--ink-dim); margin-top: 2px; }
+  .section-title { font-size: 14px; font-weight: 600; margin-top: 4px; }
+  .grid { display: flex; flex-wrap: wrap; gap: 6px; }
+  .cell {
+    padding: 7px 9px; border-radius: 8px;
+    background: var(--none); font-size: 11px; color: #555;
+    min-width: 64px; text-align: center;
+  }
+  .cell.both    { background: var(--both);    color: #fff; font-weight: 600; }
+  .cell.self    { background: var(--self);    color: #5b2028; font-weight: 600; }
+  .cell.partner { background: var(--partner); color: #1f3a82; font-weight: 600; }
+  .legend { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 6px; }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; color: #555; }
+  .legend i {
+    width: 14px; height: 14px; border-radius: 4px; display: inline-block;
+  }
+
+  /* Pairing */
+  .title { font-size: 24px; font-weight: 700; text-align: center; }
+  .sub { font-size: 13px; color: var(--ink-dim); text-align: center; margin-top: 4px; }
+  .card {
+    padding: 14px; border-radius: 12px; background: var(--card);
+    display: flex; flex-direction: column; gap: 10px; margin-top: 12px;
+  }
+  .card .l { font-size: 14px; font-weight: 600; }
+  .input {
+    border: 1px solid #d0d0d5; border-radius: 8px; padding: 10px;
+    background: #fff; font-size: 15px;
+  }
+  .btn {
+    background: var(--both); color: #fff; border: none;
+    padding: 11px; border-radius: 10px; font-size: 15px; font-weight: 600;
+    cursor: pointer;
+  }
+  .btn.secondary { background: #fff; color: var(--both); border: 1px solid var(--both); }
+
+  /* Photos screen */
+  .photos .body { font-size: 13px; color: #444; line-height: 1.5; }
+  .photos .hint { font-size: 11px; color: #999; text-align: center; }
+  .progress {
+    height: 6px; background: #eee; border-radius: 3px; overflow: hidden;
+  }
+  .progress .bar { height: 100%; background: var(--both); width: 62%; }
+</style>
+</head>
+<body>
+  <div class="phone">
+    <div class="nav">
+      <h1>FutariMap</h1>
+      <div class="tabs">
+        <button class="tab" data-target="pairing">ペア</button>
+        <button class="tab" data-target="photos">写真</button>
+        <button class="tab active" data-target="map">マップ</button>
+      </div>
+    </div>
+
+    <section class="screen" id="pairing">
+      <div class="title">二人のマップ</div>
+      <div class="sub">一緒に行った都道府県を記録しよう</div>
+      <div class="card">
+        <div class="l">新しいペアを作る</div>
+        <button class="btn">招待コードを発行</button>
+      </div>
+      <div class="card">
+        <div class="l">招待コードで参加</div>
+        <input class="input" placeholder="ABC123" />
+        <button class="btn secondary">参加する</button>
+      </div>
+    </section>
+
+    <section class="screen photos" id="photos">
+      <div class="section-title">写真から訪問地を取り込み</div>
+      <div class="body">位置情報つきの写真を読み取って、訪れた都道府県をペアのマップに反映します。</div>
+      <div class="stats">
+        <div class="stat"><div class="v">142</div><div class="l">スキャン</div></div>
+        <div class="stat"><div class="v">88</div><div class="l">登録</div></div>
+      </div>
+      <div class="progress"><div class="bar"></div></div>
+      <div class="body">最後に登録: 京都府</div>
+      <button class="btn">写真を取り込む</button>
+      <div class="hint">招待コード: KYO42A</div>
+    </section>
+
+    <section class="screen active" id="map">
+      <div class="stats">
+        <div class="stat"><div class="v" id="count-both">0</div><div class="l">二人で訪問</div></div>
+        <div class="stat"><div class="v" id="count-self">0</div><div class="l">自分</div></div>
+        <div class="stat"><div class="v" id="count-partner">0</div><div class="l">相手</div></div>
+      </div>
+      <div class="section-title">都道府県</div>
+      <div class="grid" id="grid"></div>
+      <div class="legend">
+        <span><i style="background:var(--both)"></i>二人で訪問</span>
+        <span><i style="background:var(--self)"></i>自分のみ</span>
+        <span><i style="background:var(--partner)"></i>相手のみ</span>
+        <span><i style="background:var(--none)"></i>未訪問</span>
+      </div>
+    </section>
+  </div>
+
+<script>
+  const PREFS = [
+    '北海道','青森県','岩手県','宮城県','秋田県','山形県','福島県',
+    '茨城県','栃木県','群馬県','埼玉県','千葉県','東京都','神奈川県',
+    '新潟県','富山県','石川県','福井県','山梨県','長野県',
+    '岐阜県','静岡県','愛知県','三重県',
+    '滋賀県','京都府','大阪府','兵庫県','奈良県','和歌山県',
+    '鳥取県','島根県','岡山県','広島県','山口県',
+    '徳島県','香川県','愛媛県','高知県',
+    '福岡県','佐賀県','長崎県','熊本県','大分県','宮崎県','鹿児島県','沖縄県',
+  ];
+  // サンプル訪問データ
+  const SELF    = new Set(['北海道','東京都','神奈川県','長野県','京都府','大阪府','兵庫県','広島県','福岡県','沖縄県']);
+  const PARTNER = new Set(['東京都','神奈川県','千葉県','京都府','大阪府','奈良県','広島県','香川県','福岡県','長崎県']);
+  const BOTH = new Set([...SELF].filter(p => PARTNER.has(p)));
+
+  const grid = document.getElementById('grid');
+  for (const p of PREFS) {
+    const el = document.createElement('div');
+    el.className = 'cell';
+    if (BOTH.has(p)) el.classList.add('both');
+    else if (SELF.has(p)) el.classList.add('self');
+    else if (PARTNER.has(p)) el.classList.add('partner');
+    el.textContent = p;
+    grid.appendChild(el);
+  }
+  document.getElementById('count-both').textContent = BOTH.size;
+  document.getElementById('count-self').textContent = SELF.size;
+  document.getElementById('count-partner').textContent = PARTNER.size;
+
+  for (const tab of document.querySelectorAll('.tab')) {
+    tab.addEventListener('click', () => {
+      for (const t of document.querySelectorAll('.tab')) t.classList.remove('active');
+      for (const s of document.querySelectorAll('.screen')) s.classList.remove('active');
+      tab.classList.add('active');
+      document.getElementById(tab.dataset.target).classList.add('active');
+    });
+  }
+</script>
+</body>
+</html>
