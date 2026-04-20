@@ -1,0 +1,48 @@
+{
+  "expo": {
+    "name": "FutariMap",
+    "slug": "futari-map",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "automatic",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.example.futarimap",
+      "infoPlist": {
+        "NSPhotoLibraryUsageDescription": "訪れた場所を都道府県マップに反映するため、写真の位置情報を読み取ります。",
+        "NSLocationWhenInUseUsageDescription": "現在地を都道府県マップに反映するために使用します。"
+      }
+    },
+    "android": {
+      "package": "com.example.futarimap",
+      "permissions": [
+        "READ_MEDIA_IMAGES",
+        "ACCESS_MEDIA_LOCATION",
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION"
+      ]
+    },
+    "plugins": [
+      [
+        "expo-media-library",
+        {
+          "photosPermission": "訪れた場所を都道府県マップに反映するため、写真の位置情報を読み取ります。",
+          "savePhotosPermission": false,
+          "isAccessMediaLocationEnabled": true
+        }
+      ],
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "現在地を都道府県マップに反映するために使用します。"
+        }
+      ]
+    ]
+  }
+}
